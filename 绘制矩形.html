@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 不实用css属性来设置canvas宽高，  -->
+    <canvas id="canvas" width="300" height="300" style="border:1px solid gray;">
+        <h4>你的浏览器不支持canvas, 请升级浏览器</h4>
+        <img src="no_canvas.png" alt="canvas not available"/>
+    </canvas>
+</body>
+<script type="text/javascript">
+    let canvas = document.querySelector("#canvas");
+    // 属性检测，是否支持canvas
+    if(canvas.getContext){
+        let ctx = canvas.getContext('2d');
+        // canvas 元素默认被网格覆盖
+        // canvas只支持绘制矩形 和 path
+        ctx.fillRect(10,10,100,50); //填充矩形
+        ctx.strokeRect(10,70,100,50); //边框矩形
+        ctx.clearRect(35,35,50,25);
+
+    }
+</script>
+</html>
