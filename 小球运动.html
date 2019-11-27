@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <!-- 不实用css属性来设置canvas宽高，  -->
+  <canvas id="canvas" width="1024" height="768" style="border:1px solid gray;">
+    <h4>你的浏览器不支持canvas, 请升级浏览器</h4>
+    <!-- <img src="no_canvas.png" alt="canvas not available" /> -->
+  </canvas>
+  <p id="plane"></p>
+</body>
+<script src="digit.js"></script>
+<script type="text/javascript">
+
+  /** 
+  * g 加速度  vx x轴 速度向量
+  * vy y轴向量 为-10可以上抛
+  */
+  let ball ={x:20,y:20,r:20,g:2,vx:4,vy:0,color:'#1890ff'};
+  window.onload = function () {
+    // canvas是基于状态进行绘制
+    let canvas = document.querySelector("#canvas");
+    let plane = document.querySelector("#plane");
+    canvas.width=1024;
+    canvas.height=768;
+    // 属性检测，是否支持canvas
+    if (canvas.getContext) {
+      const context = canvas.getContext('2d');
+      /**
+        * 实现动画的基本函数
+        */
+      setInterval(()=>{
+        render(context);
+        update(context);
+        plane.innerHTML ="球心X："+ball.x+'<br/>'+ "球心Y："+parseInt(ball.y)+'<br/>' + "重力加速度："+ball.g+'<br/>'+
+                         "X轴速度向量："+ball.vx+'<br/>'+ "Y轴速度向量："+parseInt(ball.vy)+'<br/>' ;
+        plane.style.color = ball.color;
+      },50);
+    }
+  }
+
+  update=(cxt)=>{
+    ball.x += ball.vx; 
+    ball.y += ball.vy;
+    ball.vy += ball.g; //在y轴 模拟重力加速度
+
+    //触底
+    if(ball.y > cxt.canvas.height - ball.r){
+      
+      //触右
+      if(ball.x>=cxt.canvas.width - ball.r){
+        //changeColor(ball.color);
+        ball.vy = -ball.vy;
+        ball.vx = -ball.vx;
+        ball.g = -ball.g;
+      }else{
+        ball.y = 768 - ball.r;
+        ball.vy = - parseInt(ball.vy*0.7); //*0.5; //0.5摩擦速度
+      }
+    }
+    // if(ball.x <= ball.r){
+    //   ball.vx = -ball.vx;
+    // }
+    //触顶
+    if(ball.y < ball.r){
+      //触左
+      if(ball.x<=ball.r){
+        changeColor(ball.color);
+        ball.vy = -ball.vy+2;
+        ball.vx = -ball.vx+2;
+        ball.g = -ball.g+2;
+      }else{
+        ball.y = ball.r;
+        ball.vy = -parseInt(ball.vy*0.7);
+      }
+    }
+
+
+    if(ball.x<ball.r){
+      ball.x = ball.r;
+    }
+    if(ball.x>cxt.canvas.width-ball.r){
+      ball.x = cxt.canvas.width-ball.r;
+    }
+
+    if(ball.y<ball.r){
+      ball.y = ball.r;
+    }
+    if(ball.y>cxt.canvas.height-ball.r){
+      ball.y = cxt.canvas.height-ball.r;
+    }
+    if(ball.g>10){
+      ball.g =10;
+    }
+    if(ball.g<-10){
+      ball.g =-10;
+    }
+
+    if(ball.vx>10){
+      ball.vx = 10;
+    }
+    if(ball.vx<-10){
+      ball.vx = -10;
+    }
+    if(ball.vy>100){
+      ball.vy = 100;
+    }
+    if(ball.vy<-100){
+      ball.vy = -100;
+    }
+
+  }
+
+  changeColor=(color)=>{
+    ball.color = color==="#1890ff"?"green":"#1890ff";
+  }
+
+  render=(cxt)=>{
+    //逐帧刷新
+    cxt.clearRect(0,0,cxt.canvas.width,cxt.canvas.height);
+    cxt.fillStyle = ball.color;
+    cxt.beginPath();
+    cxt.arc(ball.x,ball.y,ball.r,0,2*Math.PI);
+    cxt.closePath();
+    cxt.fill();
+
+    cxt.beginPath();
+    cxt.moveTo(512,356);
+    cxt.strokeStyle=ball.color;
+    cxt.lineTo(ball.x,ball.y);
+    cxt.closePath();//绘制线
+    cxt.stroke();
+  }
+</script>
+
+</html>
