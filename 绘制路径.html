@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 不实用css属性来设置canvas宽高，  -->
+    <canvas id="canvas" width="300" height="300" style="border:1px solid gray;">
+        <h4>你的浏览器不支持canvas, 请升级浏览器</h4>
+        <img src="no_canvas.png" alt="canvas not available"/>
+    </canvas>
+</body>
+<script type="text/javascript">
+    let canvas = document.querySelector("#canvas");
+    // 属性检测，是否支持canvas
+    if(canvas.getContext){
+        let ctx = canvas.getContext('2d');
+        //-------画线
+        ctx.beginPath(); //新建path
+        // ctx.moveTo(50,50); //移动到起点
+        // ctx.lineTo(200,200); //移动到终点
+        // ctx.closePath(); //闭合路径
+        // ctx.stroke(); //绘制路径  fill-绘制面积
+        //-------画三角
+        ctx.moveTo(50,100);
+        ctx.lineTo(150,100);
+        ctx.lineTo(150,300);
+        ctx.closePath();//绘制两条线，闭合成三角
+        ctx.stroke();
+        // ctx.fill();
+        //-------画圆弧 ， 不需要moveTo
+        /**
+        *  圆心，半径，开始弧度，结束弧度，顺时针/逆时针(默)
+            弧度= （角度/180）* 派
+        *
+        */
+        ctx.beginPath(); 
+        ctx.arc(150,150,150,(50*Math.PI)/180,(350*Math.PI)/180,false);
+        //ctx.closePath(); //闭合路径
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(150,150,50,0,(180*Math.PI)/180,false);
+        ctx.fill();
+
+    }
+
+</script>
+</html>
